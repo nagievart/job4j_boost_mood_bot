@@ -1,24 +1,19 @@
 package ru.job4j.bmb;
 
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import ru.job4j.bmb.content.Content;
-import ru.job4j.bmb.services.TelegramBotService;
+import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
 public class Main {
     public static void main(String[] args) {
-        SpringApplication.run(Main.class, args);
-    }
+        // Устанавливаем прокси ДО запуска Spring
+        System.setProperty("socksProxyHost", "127.0.0.1");
+        System.setProperty("socksProxyPort", "9150");
+        System.setProperty("java.net.preferIPv4Stack", "true");
 
-    @Bean
-    public CommandLineRunner initTelegramApi(ApplicationContext ctx) {
-        return args -> {
-            var bot = ctx.getBean(TelegramBotService.class);
-            bot.receive(new Content());
-        };
+        ConfigurableApplicationContext context = SpringApplication.run(Main.class, args);
+
+        System.out.println("Приложение успешно запущено. Бот работает...");
     }
 }
